@@ -9,6 +9,7 @@ from flask.ext.restful import reqparse, abort, Api, Resource
 
 from ouimeaux.signals import statechange
 from ouimeaux.device.switch import Switch
+from ouimeaux.device.insight import Insight
 from ouimeaux.environment import Environment, UnknownDevice
 from socketio import socketio_manage
 from socketio.namespace import BaseNamespace
@@ -35,12 +36,31 @@ def initialize():
 
 
 def serialize(device):
-    return {'name': device.name,
-            'type': device.__class__.__name__,
-            'serialnumber': device.serialnumber,
-            'state': device.get_state(),
-            'model': device.model,
-            'host': device.host}
+    if isinstance(device,Insight):
+        return {'name': device.name,
+                'type': device.__class__.__name__,
+                'serialnumber': device.serialnumber,
+                'state': device.get_state(),
+                'model': device.model,
+                'host': device.host,
+                'currentpower': device.current_power,
+                'lastchange': device.last_change.isoformat(),
+                'onfor': device.on_for,
+                'ontoday': device.on_today,
+                'ontotal': device.on_total,
+                'todaykwh': device.today_kwh,
+                'totalkwh': device.total_kwh,
+
+                }
+    else:
+                return {'name': device.name,
+                'type': device.__class__.__name__,
+                'serialnumber': device.serialnumber,
+                'state': device.get_state(),
+                'model': device.model,
+                'host': device.host
+                }
+
 
 
 def get_device(name, should_abort=True):

@@ -31,9 +31,6 @@ class Insight(Switch):
                 'totalmw': int(float(totalmw)),
                 'currentpower': int(float(currentmw))}
 
-    @property
-    def today_kwh(self):
-        return self.insight_params['todaymw'] * 1.6666667e-8
 
     @property
     def current_power(self):
@@ -43,7 +40,12 @@ class Insight(Switch):
         return self.insight_params['currentpower']
 
     @property
-    def today_on_time(self):
+    def last_change(self):
+        return self.insight_params['lastchange']
+
+
+    @property
+    def on_today(self):
         return self.insight_params['ontoday']
 
     @property
@@ -51,10 +53,14 @@ class Insight(Switch):
         return self.insight_params['onfor']
 
     @property
-    def last_change(self):
-        return self.insight_params['lastchange']
+    def on_total(self):
+        return self.insight_params['ontotal']
 
     @property
-    def today_standby_time(self):
-        return self.insight_params['ontoday']
+    def today_kwh(self):
+        return self.insight_params['todaymw'] * 1.6666667e-8
+
+    @property
+    def total_kwh(self):
+        return self.insight_params['totalmw'] * 1.6666667e-8
 
