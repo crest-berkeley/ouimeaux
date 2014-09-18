@@ -14,7 +14,10 @@ from socketio import socketio_manage
 from socketio.namespace import BaseNamespace
 from socketio.mixins import BroadcastMixin
 
+import logging
+
 here = lambda *x: os.path.join(os.path.dirname(__file__), *x)
+log = logging.getLogger(__name__)
 
 
 app = Flask(__name__)
@@ -55,7 +58,12 @@ class EnvironmentResource(Resource):
     def get(self):
         result = {}
         for dev in ENV:
-            result[dev.name] = serialize(dev)
+            try:
+                ser = serialize(dev)
+                result[dev.name] = ser
+            except Exception, err:
+                log.warn('ERROR: %s\n' % str(err))
+
         return result
 
     def post(self):
