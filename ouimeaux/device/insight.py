@@ -58,9 +58,9 @@ class Insight(Switch):
 
     @property
     def today_kwh(self):
-        return self.insight_params['todaymw'] * 1.6666667e-8
+        return round(self.insight_params['todaymw'] * 1.6666667e-8, 6)
 
     @property
     def total_kwh(self):
-        return self.insight_params['totalmw'] * 1.6666667e-8
+        return round(self.insight_params['totalmw'] * 1.6666667e-8, 6)
 
