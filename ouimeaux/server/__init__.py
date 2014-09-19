@@ -29,7 +29,7 @@ def initialize():
     if ENV is None:
         ENV = Environment(with_cache=False)
         ENV.start()
-        gevent.spawn(ENV.discover, 10)
+        gevent.spawn(ENV.discover, 18)
 
 
 def serialize(device):
