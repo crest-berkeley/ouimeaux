@@ -87,17 +87,6 @@ class Environment(object):
             self.registry.server.set_spawn(2)
             self.registry.server.start()
 
-    def stop(self):
-
-        if self._with_discovery:
-            # Stop the server.
-            self.upnp.server.stop()
-
-        if self._with_subscribers:
-            # Stop the server
-            self.registry.server.stop()
-
-
     def wait(self, timeout=None):
         """
         Wait for events.
