@@ -1,8 +1,9 @@
 from datetime import datetime
+
 from .switch import Switch
 
-class Insight(Switch):
 
+class Insight(Switch):
     def __repr__(self):
         return '<WeMo Insight "{name}">'.format(name=self.name)
 
