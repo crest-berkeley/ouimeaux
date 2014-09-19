@@ -23,6 +23,13 @@ api = Api(app)
 
 ENV = None
 
+def restart():
+    global ENV
+    ENV.stop()
+    ENV = None
+    initialize()
+
+
 
 def initialize():
     global ENV
@@ -85,9 +92,7 @@ class EnvironmentResource(Resource):
         return result
 
     def post(self):
-        global ENV
-        ENV = None
-        initialize()
+        restart()
         return self.get()
 
 
