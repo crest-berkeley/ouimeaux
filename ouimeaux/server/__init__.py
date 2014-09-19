@@ -40,7 +40,7 @@ def serialize(device):
                 'state': device.get_state(),
                 'model': device.model,
                 'host': device.host,
-                'currentpower': device.current_power,
+                'power': device.current_power,
                 'lastchange': device.last_change.isoformat(),
                 'onfor': device.on_for,
                 'ontoday': device.on_today,
