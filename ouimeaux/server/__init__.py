@@ -68,6 +68,9 @@ def get_device(name, should_abort=True):
         abort(404, error='No device matching {}'.format(name))
 
 
+
+
+
 # First, the REST API
 class EnvironmentResource(Resource):
     def get(self):
@@ -82,9 +85,7 @@ class EnvironmentResource(Resource):
         return result
 
     def post(self):
-        seconds = (request.json or {}).get('seconds', (
-            request.values or {}).get('seconds', 5))
-        ENV.discover(int(seconds))
+        initialize()
         return self.get()
 
 
