@@ -1,25 +1,22 @@
 import os
-import json
-import gevent
-from flask import Flask, request, Response
-from flask import render_template, send_from_directory, url_for
-from flask import send_file, make_response, abort
-from flask.ext.restful import reqparse, abort, Api, Resource
+import logging
 
+import gevent
+from flask import Flask, request
+from flask import render_template, send_from_directory
+from flask import make_response
+from flask.ext.restful import abort, Api, Resource
+from socketio import socketio_manage
+from socketio.namespace import BaseNamespace
 
 from ouimeaux.signals import statechange
 from ouimeaux.device.switch import Switch
 from ouimeaux.device.insight import Insight
 from ouimeaux.environment import Environment, UnknownDevice
-from socketio import socketio_manage
-from socketio.namespace import BaseNamespace
-from socketio.mixins import BroadcastMixin
 
-import logging
 
 here = lambda *x: os.path.join(os.path.dirname(__file__), *x)
 log = logging.getLogger(__name__)
-
 
 app = Flask(__name__)
 api = Api(app)
@@ -36,7 +33,7 @@ def initialize():
 
 
 def serialize(device):
-    if isinstance(device,Insight):
+    if isinstance(device, Insight):
         return {'name': device.name,
                 'type': device.__class__.__name__,
                 'serialnumber': device.serialnumber,
@@ -51,16 +48,15 @@ def serialize(device):
                 'todaykwh': device.today_kwh,
                 'totalkwh': device.total_kwh,
 
-                }
+        }
     else:
-                return {'name': device.name,
+        return {'name': device.name,
                 'type': device.__class__.__name__,
                 'serialnumber': device.serialnumber,
                 'state': device.get_state(),
                 'model': device.model,
                 'host': device.host
-                }
-
+        }
 
 
 def get_device(name, should_abort=True):
@@ -74,7 +70,6 @@ def get_device(name, should_abort=True):
 
 # First, the REST API
 class EnvironmentResource(Resource):
-
     def get(self):
         result = {}
         for dev in ENV:
@@ -94,7 +89,6 @@ class EnvironmentResource(Resource):
 
 
 class DeviceResource(Resource):
-
     def get(self, name):
         return serialize(get_device(name))
 
@@ -120,7 +114,6 @@ api.add_resource(DeviceResource, '/api/device/<string:name>')
 
 
 class SocketNamespace(BaseNamespace):
-
     def update_state(self, sender, **kwargs):
         data = serialize(sender)
         data['state'] = kwargs.get('state', data['state'])
@@ -158,9 +151,11 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'img/favicon.ico')
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
 
 app.config.from_object('ouimeaux.server.settings')
 app.url_map.strict_slashes = False
