@@ -85,6 +85,7 @@ class EnvironmentResource(Resource):
         return result
 
     def post(self):
+        global ENV
         ENV = None
         initialize()
         return self.get()
