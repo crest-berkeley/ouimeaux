@@ -2,6 +2,8 @@ from datetime import datetime
 
 from .switch import Switch
 
+import logging
+
 
 class Insight(Switch):
     def __repr__(self):
@@ -9,7 +11,9 @@ class Insight(Switch):
 
     @property
     def insight_params(self):
+        logging.info('getting insight_params for %s', self.name)
         params = self.insight.GetInsightParams().get('InsightParams')
+
         (
             state,  # 0 if off, 1 if on, 8 if on but load is off
             lastchange,
