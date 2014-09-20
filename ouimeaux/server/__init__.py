@@ -34,19 +34,21 @@ def initialize():
 
 def serialize(device):
     if isinstance(device, Insight):
+        
+        d_ip = device.insight_params
         return {'name': device.name,
                 'type': device.__class__.__name__,
                 'serialnumber': device.serialnumber,
-                'state': device.get_state(),
+                'state': d_ip['state'],
                 'model': device.model,
                 'host': device.host,
-                'power': device.current_power,
-                'lastchange': device.last_change.isoformat(),
-                'onfor': device.on_for,
-                'ontoday': device.on_today,
-                'ontotal': device.on_total,
-                'todaykwh': device.today_kwh,
-                'totalkwh': device.total_kwh,
+                'power': d_ip['power'],
+                'lastchange': d_ip['lastchange'].isoformat(),
+                'onfor': d_ip['onfor'],
+                'ontoday': d_ip['ontoday'],
+                'ontotal': d_ip['ontotal'],
+                'todaykwh': d_ip['todaykwh'],
+                'totalkwh': d_ip['totalkwh'],
 
         }
     else:

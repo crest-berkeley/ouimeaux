@@ -32,17 +32,17 @@ class Insight(Switch):
                 'onfor': int(onfor),
                 'ontoday': int(ontoday),
                 'ontotal': int(ontotal),
-                'todaymw': int(float(todaymw)),
-                'totalmw': int(float(totalmw)),
-                'currentpower': int(float(currentmw))}
+                'todaykwh': round(float(todaymw) * 1.6666667e-8, 6),
+                'totalkwh': round(float(totalmw) * 1.6666667e-8, 6),
+                'power': int(float(currentmw))}
 
 
     @property
-    def current_power(self):
+    def power(self):
         """
         Returns the current power usage in mW.
         """
-        return self.insight_params['currentpower']
+        return self.insight_params['power']
 
     @property
     def last_change(self):
@@ -63,9 +63,9 @@ class Insight(Switch):
 
     @property
     def today_kwh(self):
-        return round(self.insight_params['todaymw'] * 1.6666667e-8, 6)
+        return self.insight_params['todaykwh']
 
     @property
     def total_kwh(self):
-        return round(self.insight_params['totalmw'] * 1.6666667e-8, 6)
+        return self.insight_params['totalkwh']
 
